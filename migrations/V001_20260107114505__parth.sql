@@ -42,6 +42,5 @@ CREATE INDEX idx_objects_bucket ON objects(bucket_id);
 CREATE INDEX idx_objects_key ON objects(object_key);
 CREATE INDEX idx_metadata_key ON object_metadata(meta_key);
 
-CREATE INDEX idx_objects_bucket_key
-ON objects(bucket_id, object_key);
+
 
