@@ -30,8 +30,7 @@ public class BucketServiceImp implements BucketService {
             throw new ValidationException("duplicate bucket name");
         };       
         
-        // TODO fix this 
-        if (regionService.isValidRegion(region_input)){
+        if (!regionService.isValidRegion(region_input)){
             throw new ValidationException("region not defined");
         }
 
