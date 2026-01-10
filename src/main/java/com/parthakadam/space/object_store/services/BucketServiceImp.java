@@ -48,5 +48,8 @@ public class BucketServiceImp implements BucketService {
         return bucketRepository.findAll();
     }
 
-    
+    @Override
+    public Bucket getBucketByName(String name){
+        return bucketRepository.findByName(name);
+    }
 }

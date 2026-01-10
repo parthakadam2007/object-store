@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Generated;
+import jakarta.validation.ValidationException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,5 +30,12 @@ public class  RegionService {
         System.out.println(regions);
         System.out.println(regions.contains(region.toLowerCase()));
         return regions.contains(region.toLowerCase());
+    }
+    public void addRegion(String region){
+        if(regions.contains(region)){
+            throw new ValidationException("Region orlady present");
+        }
+        regions.add(region);
+        return;
     }
 }

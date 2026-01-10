@@ -7,16 +7,25 @@ import com.parthakadam.space.object_store.dto.BucketCreateRequestDTO;
 import com.parthakadam.space.object_store.dto.BucketResponseDTO;
 import com.parthakadam.space.object_store.mapper.BucketMapper;
 import com.parthakadam.space.object_store.models.Bucket;
+import com.parthakadam.space.object_store.models.ObjectEntity;
 import com.parthakadam.space.object_store.services.BucketServiceImp;
+import com.parthakadam.space.object_store.services.ObjectService;
+import com.parthakadam.space.object_store.services.ObjectServiceImp;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import jakarta.validation.ValidationException;
 
+import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,21 +34,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
-
 
 @RestController
 public class ObjectCoreController {
 
-
-    @Autowired 
+    @Autowired
     private BucketServiceImp bucketService;
+    @Autowired
+    private ObjectServiceImp objectService;
 
-    //////////////Bucket 
+    ////////////// Bucket
     // //////////GET
-
 
     /**
      * @return name of bucket
@@ -55,12 +62,12 @@ public class ObjectCoreController {
         return ResponseEntity.ok(result);
     }
 
-
     @GetMapping("/keys")
     public String getKeys() {
         return new String();
     }
-    ////////////////put/////
+
+    //////////////// post                                   /////
     @PostMapping("/buckets")
     public ResponseEntity<BucketResponseDTO> createBucket(
             @Valid @RequestBody BucketCreateRequestDTO dto) {
@@ -71,45 +78,67 @@ public class ObjectCoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
- 
-    
-    //TODO Add db for metadata
-//    @PostMapping("/{bucket}/{key}")
-//    public StoredObject upload(
-//             @PathVariable String bucket,
-//             @PathVariable String key,
-//             @RequestParam MultipartFile file,
-//             @RequestParam(required = false) Map<String, String> metadata
-//     ) throws Exception {
+    // TODO Add db for metadata
+     @PostMapping("/{bucket}/{key}")
+        public ResponseEntity<ObjectEntity> upload(
+                @PathVariable String bucket,
+                @PathVariable String key,
+                @RequestParam("file") MultipartFile file) {
 
-//         return storage.putObject(
-//                 bucket,
-//                 key,
-//                 file.getInputStream(),
-//                 file.getContentType(),
-//                 metadata
-//         );
-//     }
+            if (file.isEmpty()) {
+                throw new ValidationException("File is empty");
+            }
 
-//     @GetMapping("/{bucket}/{key}")
-//     public void download(
-//             @PathVariable String bucket,
-//             @PathVariable String key,
-//             HttpServletResponse response
-//     ) throws Exception {
+            ObjectEntity object;
+            try {
+                object = objectService.putObject(
+                        bucket,
+                        key,
+                        file.getInputStream(),
+                        file.getContentType());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read uploaded file", e);
+            }
 
-//         var input = storage.getObject(bucket, key);
-//         input.transferTo(response.getOutputStream());
-//     }
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(object);
+        }
+    // @GetMapping("/{bucket}/{key}")
+    // public ResponseEntity<Resource> getObject(
+    //         @PathVariable String bucket,
+    //         @PathVariable String key
+    // ) {
 
-//     @DeleteMapping("/{bucket}/{key}")
-//     public void delete(
-//             @PathVariable String bucket,
-//             @PathVariable String key
-//     ) throws Exception {
-//         storage.deleteObject(bucket, key);
-//     }
-    
+    //     ObjectEntity object = objectService.getObject(bucket, key);
 
-    
+    //     Path path = Paths.get(object.getDataPath());
+    //     if (!Files.exists(path)) {
+    //         throw new RuntimeException("Object data missing on disk");
+    //     }
+
+    //     Resource resource;
+    //     try {
+    //         resource = new UrlResource(path.toUri());
+    //     } catch (MalformedURLException e) {
+    //         throw new RuntimeException("Invalid object path", e);
+    //     }
+
+    //     return ResponseEntity.ok()
+    //             .contentType(
+    //                     MediaType.parseMediaType(
+    //                             object.getContentType() != null
+    //                                     ? object.getContentType()
+    //                                     : MediaType.APPLICATION_OCTET_STREAM_VALUE
+    //                     )
+    //             )
+    //             .contentLength(object.getSizeBytes())
+    //             .header(
+    //                     HttpHeaders.CONTENT_DISPOSITION,
+    //                     "attachment; filename=\"" + object.getObjectKey() + "\""
+    //             )
+    //             .header("X-Checksum-SHA256", object.getChecksumSha256())
+    //             .body(resource);
+    // }
+
 }
