@@ -18,15 +18,18 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import jakarta.validation.ValidationException;
 
-import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,7 +81,6 @@ public class ObjectCoreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // TODO Add db for metadata
      @PostMapping("/{bucket}/{key}")
         public ResponseEntity<ObjectEntity> upload(
                 @PathVariable String bucket,
@@ -104,41 +106,40 @@ public class ObjectCoreController {
                     .status(HttpStatus.CREATED)
                     .body(object);
         }
-    // @GetMapping("/{bucket}/{key}")
-    // public ResponseEntity<Resource> getObject(
-    //         @PathVariable String bucket,
-    //         @PathVariable String key
-    // ) {
+        
+    @GetMapping("/{bucket}/{key}")
+    public ResponseEntity<Resource> getObject(
+            @PathVariable String bucket,
+            @PathVariable String key
+    ) {
 
-    //     ObjectEntity object = objectService.getObject(bucket, key);
+        ObjectEntity object = objectService.getObject(bucket, key);
 
-    //     Path path = Paths.get(object.getDataPath());
-    //     if (!Files.exists(path)) {
-    //         throw new RuntimeException("Object data missing on disk");
-    //     }
+        Path path = Paths.get(object.getDataPath());
+        if (!Files.exists(path)) {
+            throw new RuntimeException("Object data missing on disk");
+        }
 
-    //     Resource resource;
-    //     try {
-    //         resource = new UrlResource(path.toUri());
-    //     } catch (MalformedURLException e) {
-    //         throw new RuntimeException("Invalid object path", e);
-    //     }
+        Resource resource;
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Invalid object path", e);
+        }
 
-    //     return ResponseEntity.ok()
-    //             .contentType(
-    //                     MediaType.parseMediaType(
-    //                             object.getContentType() != null
-    //                                     ? object.getContentType()
-    //                                     : MediaType.APPLICATION_OCTET_STREAM_VALUE
-    //                     )
-    //             )
-    //             .contentLength(object.getSizeBytes())
-    //             .header(
-    //                     HttpHeaders.CONTENT_DISPOSITION,
-    //                     "attachment; filename=\"" + object.getObjectKey() + "\""
-    //             )
-    //             .header("X-Checksum-SHA256", object.getChecksumSha256())
-    //             .body(resource);
-    // }
+        return ResponseEntity.ok()
+                .contentType(
+                        object.getContentType() != null
+                                ? MediaType.parseMediaType(object.getContentType())
+                                : MediaType.APPLICATION_OCTET_STREAM
+                )
+                .contentLength(object.getSizeBytes())
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + object.getObjectKey() + "\""
+                )
+                .header("X-Checksum-SHA256", object.getChecksumSha256())
+                .body(resource);
+    }
 
 }

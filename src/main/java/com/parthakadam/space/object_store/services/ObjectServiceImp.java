@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -21,6 +20,7 @@ import com.parthakadam.space.object_store.models.Bucket;
 import com.parthakadam.space.object_store.models.ObjectEntity;
 import com.parthakadam.space.object_store.repository.ObjectRepository;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 
@@ -64,10 +64,11 @@ public class ObjectServiceImp implements ObjectService {
         if (bucket == null) {
             throw new ValidationException("bucket does not exit");
         }
-        if(objectRepository.existsByBucketIdAndObjectKey(bucket.getId(), objectKey)){
+        if (objectRepository.existsByBucketIdAndObjectKey(bucket.getId(), objectKey)) {
             throw new ValidationException("duplicate key");
 
-        };
+        }
+        ;
 
         UUID objectIdUUID = UUID.randomUUID();
         String objectId = objectIdUUID.toString().replace("-", "");
@@ -93,7 +94,6 @@ public class ObjectServiceImp implements ObjectService {
             String objectKey,
             InputStream data,
             String contentType) {
-
 
         // 1. Create object metadata (no file yet)
         ObjectEntity object = createObjectEntity(bucketName, objectKey);
@@ -144,6 +144,17 @@ public class ObjectServiceImp implements ObjectService {
             }
             throw e;
         }
+    }
+
+    @Transactional
+    public ObjectEntity getObject(String bucketName,String objectKey){
+        ObjectEntity objectEntity = objectRepository.getObject(bucketName, objectKey);
+        
+        if(objectEntity ==null){
+            throw new EntityExistsException("object not found");
+        }
+
+        return objectEntity;
     }
 
 }
