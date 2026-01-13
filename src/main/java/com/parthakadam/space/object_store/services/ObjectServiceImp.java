@@ -64,6 +64,10 @@ public class ObjectServiceImp implements ObjectService {
         if (bucket == null) {
             throw new ValidationException("bucket does not exit");
         }
+        if(objectRepository.existsByBucketIdAndObjectKey(bucket.getId(), objectKey)){
+            throw new ValidationException("duplicate key");
+
+        };
 
         UUID objectIdUUID = UUID.randomUUID();
         String objectId = objectIdUUID.toString().replace("-", "");
@@ -89,6 +93,7 @@ public class ObjectServiceImp implements ObjectService {
             String objectKey,
             InputStream data,
             String contentType) {
+
 
         // 1. Create object metadata (no file yet)
         ObjectEntity object = createObjectEntity(bucketName, objectKey);
