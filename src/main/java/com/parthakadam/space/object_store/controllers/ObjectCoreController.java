@@ -152,4 +152,31 @@ public class ObjectCoreController {
         return ResponseEntity.ok("Object deleted successfully");
     }
 
+    @PutMapping("/{bucket}/{key}")
+    public ResponseEntity<ObjectEntity> putMethodName(
+        @PathVariable String bucket,
+         @PathVariable String key,
+         @RequestParam("file") MultipartFile file
+        ) {
+
+            if (file.isEmpty()) {
+                throw new ValidationException("File is empty");
+            }
+            objectService.deleteObject(bucket, key);
+                        ObjectEntity object;
+            try {
+                object = objectService.putObject(
+                        bucket,
+                        key,
+                        file.getInputStream(),
+                        file.getContentType());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read uploaded file", e);
+            }
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(object);
+    }
+
 }
