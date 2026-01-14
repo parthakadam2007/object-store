@@ -107,6 +107,46 @@ curl -O http://localhost:8080/my-bucket/my-file
 - `spring.jpa.hibernate.ddl-auto=update` is enabled; for production prefer `validate` or `none` and rely on migrations.
 - Storage is local disk only; consider pluggable storage (S3/GCS/Blob) for HA/scale.
 
+## Major gaps
+Logging vs. debug prints (High)
+
+Files: RegionService.java, BucketServiceImp.java use System.out.println.
+Impact: noisy, uncontrolled logs; hard to manage in production.
+Fix: replace with SLF4J/Logback logging, structured logs.
+Improper exception types + missing global error mapping (High)
+
+Examples: EntityExistsException for "not found", RuntimeException for IO errors.
+Impact: wrong HTTP statuses and unclear API semantics.
+Fix: introduce domain exceptions (e.g., NotFoundException, ConflictException) and a @ControllerAdvice mapping.
+Race conditions & DB uniqueness handling (High)
+
+Example: app-level existsBy... then insert; migration creates non-unique index.
+Impact: duplicates on concurrent requests.
+Fix: add DB-level UNIQUE constraint/index on (bucket_id, object_key) and map constraint violation → 409 Conflict.
+Hardcoded filesystem path & config handling (High / Medium)
+
+File: ObjectStoreConfig uses Paths.get("D:\\object_store_data").
+Impact: non-portable, hard-to-change, fails CI/containers.
+Fix: use @Value/@ConfigurationProperties, @PostConstruct to create dirs, and make storage pluggable (interface for S3/etc.).
+Tight coupling & field injection (Medium)
+
+Files: ObjectCoreController and services depend on concrete *Imp classes and use @Autowired field injection.
+Impact: harder to test and swap implementations.
+Fix: prefer constructor injection and program to interfaces.
+Native queries & repository misuse (Medium)
+
+BucketRepository uses native INSERT and SELECT with @Modifying.
+Impact: error-prone; bypasses JPA semantics and lifecycle.
+Fix: use JPA save() and repository query methods returning Optional<T>.
+Entities & Lombok consistency / mutability (Low)
+
+Mixed explicit getters + Lombok + setters; createdAt is inconsistently created.
+Fix: pick a policy (immutable vs. mutable), remove duplicates, use lifecycle callbacks or set createdAt in services.
+Test coverage is minimal (High)
+
+Only a context-load test exists.
+Fix: add unit tests for services, integration tests for controllers, and repository integration tests.
+
 ---
 
 ## Development & contribution 💡
