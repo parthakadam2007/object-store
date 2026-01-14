@@ -27,8 +27,8 @@ public class  RegionService {
     }
 
     public boolean isValidRegion(String region) {
-        System.out.println(regions);
-        System.out.println(regions.contains(region.toLowerCase()));
+        // System.out.println(regions);
+        // System.out.println(regions.contains(region.toLowerCase()));
         return regions.contains(region.toLowerCase());
     }
     public void addRegion(String region){

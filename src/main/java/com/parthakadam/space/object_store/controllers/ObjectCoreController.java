@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class ObjectCoreController {
@@ -48,6 +50,8 @@ public class ObjectCoreController {
     @Autowired
     private ObjectServiceImp objectService;
 
+    private static final Logger log =
+            LoggerFactory.getLogger(ObjectCoreController.class);
     ////////////// Bucket
     // //////////GET
 
@@ -56,6 +60,9 @@ public class ObjectCoreController {
      */
     @GetMapping("/buckets")
     public ResponseEntity<List<BucketResponseDTO>> getBuckets() {
+        log.info("User created");
+        log.debug("Debugging user creation");
+        log.error("Something went wrong");
 
         List<BucketResponseDTO> result = bucketService.getBuckets()
                 .stream()
