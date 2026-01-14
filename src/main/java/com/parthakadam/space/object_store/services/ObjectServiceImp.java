@@ -147,18 +147,23 @@ public class ObjectServiceImp implements ObjectService {
     }
 
     @Transactional
-    public ObjectEntity getObject(String bucketName,String objectKey){
+    public ObjectEntity getObject(String bucketName, String objectKey) {
         ObjectEntity objectEntity = objectRepository.getObject(bucketName, objectKey);
-        
-        if(objectEntity ==null){
+
+        if (objectEntity == null) {
             throw new EntityExistsException("object not found");
         }
 
-        try {
+        try (InputStream is = Files.newInputStream(Paths.get(objectEntity.getDataPath()))) {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] fileBytes = Files.readAllBytes(Paths.get(objectEntity.getDataPath()));
-            digest.update(fileBytes);
-            if(!objectEntity.getChecksumSha256().equals(bytesToHex(digest.digest()))) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+
+            while ((bytesRead = is.read(buffer)) != -1) {
+                digest.update(buffer, 0, bytesRead);
+            }
+
+            if (!objectEntity.getChecksumSha256().equals(bytesToHex(digest.digest()))) {
                 throw new RuntimeException("data integrity check failed");
             }
         } catch (NoSuchAlgorithmException | IOException e) {
@@ -166,6 +171,25 @@ public class ObjectServiceImp implements ObjectService {
         }
 
         return objectEntity;
+    }
+
+    @Transactional
+    public void deleteObject(String bucketName, String objectKey) {
+        ObjectEntity objectEntity = objectRepository.getObject(bucketName, objectKey);
+
+        if (objectEntity == null) {
+            throw new EntityExistsException("object not found");
+        }
+
+        Path path = Paths.get(objectEntity.getDataPath());
+
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new RuntimeException("failed to delete object data", e);
+        }
+
+        objectRepository.delete(objectEntity);
     }
 
 }

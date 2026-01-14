@@ -142,4 +142,14 @@ public class ObjectCoreController {
                 .body(resource);
     }
 
+    @DeleteMapping("/{bucket}/{key}")
+    public ResponseEntity<String> deleteObject(
+            @PathVariable String bucket,
+            @PathVariable String key
+    ) {
+
+        objectService.deleteObject(bucket, key);
+        return ResponseEntity.ok("Object deleted successfully");
+    }
+
 }
