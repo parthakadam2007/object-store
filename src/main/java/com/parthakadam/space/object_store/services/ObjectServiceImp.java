@@ -154,6 +154,17 @@ public class ObjectServiceImp implements ObjectService {
             throw new EntityExistsException("object not found");
         }
 
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] fileBytes = Files.readAllBytes(Paths.get(objectEntity.getDataPath()));
+            digest.update(fileBytes);
+            if(!objectEntity.getChecksumSha256().equals(bytesToHex(digest.digest()))) {
+                throw new RuntimeException("data integrity check failed");
+            }
+        } catch (NoSuchAlgorithmException | IOException e) {
+            throw new RuntimeException("data integrity check failed", e);
+        }
+
         return objectEntity;
     }
 
