@@ -72,6 +72,7 @@ public class ObjectCoreController {
         return ResponseEntity.ok(result);
     }
 
+    // TODO :return auth related things
     @GetMapping("/keys")
     public String getKeys() {
         return new String();

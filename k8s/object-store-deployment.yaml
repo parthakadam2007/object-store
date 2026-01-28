@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: object-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: object-store
+  template:
+    metadata:
+      labels:
+        app: object-store
+    spec:
+      containers:
+        - name: object-store
+          image: parthakadam/object-store-app:v10
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: upload-volume
+              mountPath: /data/uploads
+      volumes:
+        - name: upload-volume
+          hostPath:
+            path: /mnt/data/object_store_data
+            type: DirectoryOrCreate
+
+
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: object-store-deployment
+#   labels:
+#     app: object-store
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: object-store
+#   template:
+#     metadata:
+#       labels:
+#         app: object-store
+#     spec:
+#       containers:
+#       - name: object-store
+#         image: parthakadam/object-store-app:1.0
+#         ports:
+#         - containerPort: 8080

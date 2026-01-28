@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HealthController {
     @GetMapping("/")
     public String home() {
-        return"healthy";
+        return"healthy 1.01";
     }
 
     @GetMapping("/health")
