@@ -1,7 +1,7 @@
-# object-store 🗄️
+# cloud native object store 
 
 **Simple object storage service (Spring Boot)**
-This is very immature way of implementing an object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
+This is very immature way of implementing an claude native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
 
 A small Spring Boot service for storing objects (files) on disk and recording metadata in PostgreSQL. This repo is intended as a demo / starting point for a self-hosted object store and includes basic endpoints for creating buckets, uploading files, and downloading objects.
 
@@ -14,6 +14,28 @@ A small Spring Boot service for storing objects (files) on disk and recording me
 - Download objects (streamed resource) with checksum header
 
 ---
+## Future feature:
+This features are very keen to make it scalabe 
+1. Implementing authentication
+  - Rate limiting (per access key / IP)
+  - Request signing (AWS S3 style HMAC)
+  - Request signing (AWS S3 style HMAC)
+
+2. Metadata Service
+Now object store is directly writing to DB (which is wrong for multiple resone)
+
+3. failure handling
+
+4. Split Object Core into Sub-Managers
+
+  Object Core Manager
+  ├── Placement Engine
+  ├── Replication Manager
+  ├── Health Monitor
+  ├── Rebalancer
+  └── Garbage Collector
+
+
 
 ## Quickstart ⚡
 
