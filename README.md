@@ -1,7 +1,7 @@
 # cloud native object store 
 
 **Simple object storage service (Spring Boot)**
-This is very immature way of implementing an claude native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
+This is very immature way of implementing an cloud native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
 
 A small Spring Boot service for storing objects (files) on disk and recording metadata in PostgreSQL. This repo is intended as a demo / starting point for a self-hosted object store and includes basic endpoints for creating buckets, uploading files, and downloading objects.
 
