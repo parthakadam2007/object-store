@@ -79,6 +79,7 @@ public class ObjectCoreController {
     }
 
     //////////////// post                                   /////
+    /// Creating buckets
     @PostMapping("/buckets")
     public ResponseEntity<BucketResponseDTO> createBucket(
             @Valid @RequestBody BucketCreateRequestDTO dto) {

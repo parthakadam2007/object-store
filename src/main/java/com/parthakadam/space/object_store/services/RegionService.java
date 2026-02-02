@@ -22,13 +22,10 @@ public class  RegionService {
 
     public RegionService() {
         regions.add("localhost");
-        // regions.add("india");
-        // regions.add("us_south");
     }
 
     public boolean isValidRegion(String region) {
-        // System.out.println(regions);
-        // System.out.println(regions.contains(region.toLowerCase()));
+
         return regions.contains(region.toLowerCase());
     }
     public void addRegion(String region){

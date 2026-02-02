@@ -12,7 +12,9 @@ import java.security.NoSuchAlgorithmException;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.parthakadam.space.object_store.configs.ObjectStoreConfig;
@@ -183,13 +185,17 @@ public class ObjectServiceImp implements ObjectService {
 
         Path path = Paths.get(objectEntity.getDataPath());
 
+        try{
+            objectRepository.delete(objectEntity);
+        }catch(DataAccessException  e){
+            throw new RuntimeException("failed to delete object metadata ", e);
+        }
+
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new RuntimeException("failed to delete object data", e);
         }
-
-        objectRepository.delete(objectEntity);
     }
 
 }
