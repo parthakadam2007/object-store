@@ -21,5 +21,5 @@ public interface ObjectService {
     );
 
     public ObjectEntity getObject(String bucketName,String objectKey);
-
+    // public SyncReplicationStrategy
 }
