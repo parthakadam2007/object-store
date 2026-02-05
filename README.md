@@ -35,6 +35,7 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
   ├── Rebalancer
   └── Garbage Collector
 
+5. Support large file upload 
 
 
 ## Quickstart ⚡

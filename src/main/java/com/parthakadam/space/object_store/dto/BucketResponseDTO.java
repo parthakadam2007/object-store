@@ -2,6 +2,7 @@ package com.parthakadam.space.object_store.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -14,4 +15,6 @@ public class BucketResponseDTO {
     private String name;
     private String region;
     private OffsetDateTime createdAt;
+
+    
 }
