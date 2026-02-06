@@ -37,6 +37,7 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 5. Support large file write and read
 
+6. versioning 
 
 ## Quickstart ⚡
 
