@@ -1,6 +1,6 @@
 # cloud native object store 
 
-![Logo](./docs/logo.png)
+![Logo](./docs/logo1.png)
 
 **Simple object storage service (Spring Boot)**
 This is very immature way of implementing an cloud native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
