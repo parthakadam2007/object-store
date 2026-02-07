@@ -1,5 +1,7 @@
 # cloud native object store 
 
+![Logo](./docs/logo.png)
+
 **Simple object storage service (Spring Boot)**
 This is very immature way of implementing an cloud native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
 
@@ -7,7 +9,7 @@ A small Spring Boot service for storing objects (files) on disk and recording me
 
 ---
 
-## Features ✅
+## Features 
 
 - Create and list buckets
 - Upload objects (multipart file upload)
@@ -39,7 +41,7 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 6. versioning 
 
-## Quickstart ⚡
+## Quickstart 
 
 Prerequisites
 
@@ -72,7 +74,7 @@ mvn spring-boot:run
 
 ---
 
-## API Endpoints 📡
+## API Endpoints 
 
 - GET / → Health check (returns `healthy`)
 - GET /health → Health check (returns `ok`)
@@ -108,22 +110,21 @@ curl -O http://localhost:8080/my-bucket/my-file
 
 ---
 
-## Configuration & storage 🔧
-
+## Configuration & storage 
 - Upload directory currently configured in `ObjectStoreConfig` as `D:\object_store_data` (Windows path). You can change this in code or replace with a configurable property (recommended).
 - Database connection via `application.properties`.
 - Logging: the code contains a few `System.out` calls (development remnants) and minimal logging. Consider switching fully to SLF4J/Logback for production.
 
 ---
 
-## Tests 🧪
+## Tests 
 
 - There is a single context-load test at `src/test`.
 - Recommended: add unit tests for services and integration tests for controllers/file upload flows.
 
 ---
 
-## Known issues & roadmap ⚠️
+## Known issues & roadmap 
 
 - Some debug `System.out.println` left in services — replace with structured logging.
 - Exception handling is inconsistent (some endpoints throw `RuntimeException`, wrong exception types used). Add `@ControllerAdvice` to map exceptions to proper HTTP status codes.
@@ -173,7 +174,7 @@ Fix: add unit tests for services, integration tests for controllers, and reposit
 
 ---
 
-## Development & contribution 💡
+## Development & contribution 
 
 - Fork and open a PR. Keep changes small and focused (e.g., logging cleanup, exception mapping, unique migration, tests).
 - Please add tests for any bugfix or new feature.
