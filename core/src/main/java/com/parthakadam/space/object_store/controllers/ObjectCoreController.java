@@ -75,7 +75,7 @@ public class ObjectCoreController {
     // TODO :return auth related things
     @GetMapping("/keys")
     public String getKeys() {
-        return new String();
+        return new String("my_key");
     }
 
     //////////////// post                                   /////

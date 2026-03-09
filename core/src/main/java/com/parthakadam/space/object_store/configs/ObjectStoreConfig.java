@@ -15,7 +15,6 @@ import lombok.Getter;
 @Service
 public class ObjectStoreConfig {
     private final Path uploadDir = Paths.get("D:\\object_store_data")  ; 
-    
 
     public ObjectStoreConfig()throws IOException{
         Files.createDirectories(uploadDir);

@@ -1,4 +1,4 @@
-# cloud native object store 
+# Cloud native object store 
 
 ![Logo](./docs/logo1.png)
 
