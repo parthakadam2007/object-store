@@ -162,7 +162,7 @@ public class ObjectCoreController {
     }
 
     @PutMapping("/{bucket}/{key}")
-    public ResponseEntity<ObjectEntity> putMethodName(
+    public ResponseEntity<ObjectEntity> updateObject(
         @PathVariable String bucket,
          @PathVariable String key,
          @RequestParam("file") MultipartFile file
