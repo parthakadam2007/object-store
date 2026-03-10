@@ -45,10 +45,13 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class ObjectCoreController {
 
-    @Autowired
     private BucketServiceImp bucketService;
-    @Autowired
     private ObjectServiceImp objectService;
+
+    ObjectCoreController(BucketServiceImp bucketService,ObjectServiceImp objectService){
+        this.bucketService = bucketService;
+        this.objectService = objectService;
+    }
 
     private static final Logger log =
             LoggerFactory.getLogger(ObjectCoreController.class);
