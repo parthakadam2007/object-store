@@ -41,6 +41,10 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 6. versioning 
 
+7. configurataion yaml
+
+8. cli interface
+
 ## Quickstart 
 
 Prerequisites
