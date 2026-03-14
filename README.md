@@ -19,7 +19,12 @@ A small Spring Boot service for storing objects (files) on disk and recording me
 ## Future feature:
 This features are very keen to make it scalabe and production ready
 1. Implementing authentication
+  - secret token auth
+      access key ID 
+      secret access key
   - Rate limiting (per access key / IP)
+
+
   - Request signing (AWS S3 style HMAC)
   - Request signing (AWS S3 style HMAC)
 
