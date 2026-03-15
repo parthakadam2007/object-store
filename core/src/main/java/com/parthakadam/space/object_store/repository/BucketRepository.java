@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 public interface BucketRepository extends JpaRepository<Bucket,UUID>{
 
      boolean existsByName(String name);
+     
 @Modifying
 @Query(
     value = "INSERT INTO buckets (name, region) VALUES (:name, :region)",
