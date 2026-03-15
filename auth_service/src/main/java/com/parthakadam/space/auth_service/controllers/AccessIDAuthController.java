@@ -30,6 +30,4 @@ public class AccessIDAuthController {
          SecretTokenDTO  secretToken = accessIDAuthSerivceImp.createAccessID(objectId);
          return ResponseEntity.ok(secretToken);
     }
-
-
 }
