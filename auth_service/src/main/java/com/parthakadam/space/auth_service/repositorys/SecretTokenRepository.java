@@ -27,5 +27,5 @@ public interface SecretTokenRepository  extends JpaRepository<SecretToken, UUID>
             @Param("bucket_id") UUID bucketId
     );
 
-List<SecretToken> findByAccessKeyId(UUID accessKeyId);
+    List<SecretToken> findByAccessKeyId(UUID accessKeyId);
 }
