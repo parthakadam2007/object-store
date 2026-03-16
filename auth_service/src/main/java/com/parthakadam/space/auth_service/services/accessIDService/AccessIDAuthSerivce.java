@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface AccessIDAuthSerivce {
     public SecretTokenDTO createAccessID(UUID objectId);
-    public Boolean validateAccessID(UUID accessID , String secretAccessKeyHash);
+    public Boolean validateAccessID(UUID accessID , UUID bucketId, String secretAccessKeyHash );
 }

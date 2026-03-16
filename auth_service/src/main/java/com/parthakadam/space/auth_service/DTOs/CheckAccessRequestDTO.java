@@ -8,5 +8,6 @@ import java.util.UUID;
 @Getter
 public class CheckAccessRequestDTO {
     private UUID accessKeyId;
+    private UUID bucketId;
     private String secretAccessKeyHash;
 }

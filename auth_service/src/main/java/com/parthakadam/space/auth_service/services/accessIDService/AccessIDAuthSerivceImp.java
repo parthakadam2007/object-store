@@ -49,7 +49,7 @@ public class AccessIDAuthSerivceImp  implements   AccessIDAuthSerivce {
     }
 
     @Override
-    public Boolean validateAccessID(UUID accessID, String accessToken) {
+    public Boolean validateAccessID(UUID accessID,UUID bucketId, String accessToken) {
 
         List<SecretToken> secretTokens = secretTokenRepository.findByAccessKeyId(accessID);
 

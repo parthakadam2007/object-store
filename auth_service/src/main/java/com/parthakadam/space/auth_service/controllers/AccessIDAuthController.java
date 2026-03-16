@@ -23,7 +23,7 @@ public class AccessIDAuthController {
 
     @GetMapping("/checkAccessID")
     public ResponseEntity<Boolean> authenticateAccessID(@RequestBody CheckAccessRequestDTO checkAccessRequestDTO){
-        Boolean result  = accessIDAuthSerivceImp.validateAccessID(checkAccessRequestDTO.getAccessKeyId(), checkAccessRequestDTO.getSecretAccessKeyHash());
+        Boolean result  = accessIDAuthSerivceImp.validateAccessID(checkAccessRequestDTO.getAccessKeyId(),checkAccessRequestDTO.getBucketId(), checkAccessRequestDTO.getSecretAccessKeyHash());
         return ResponseEntity.ok(result);
     }
 
