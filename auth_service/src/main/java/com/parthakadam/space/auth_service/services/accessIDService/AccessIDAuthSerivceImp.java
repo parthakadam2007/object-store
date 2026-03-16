@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AccessIDAuthSerivceImp  implements   AccessIDAuthSerivce {
+public class AccessIDAuthSerivceImp  implements  AccessIDAuthSerivce {
 
     private  static  final Logger logger = LoggerFactory.getLogger(AuthServiceApplication.class);
     private  SecretTokenRepository secretTokenRepository;
