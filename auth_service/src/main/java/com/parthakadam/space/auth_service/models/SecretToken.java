@@ -7,6 +7,8 @@ import lombok.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(
         name = "secret_token",
@@ -26,7 +28,7 @@ public class SecretToken {
     private UUID id;
 
     @Column(name = "access_key_id")
-    private String accessKeyId;
+    private UUID accessKeyId;
 
     @Column(name = "secret_access_key_hash")
     private String secretAccessKeyHash;
@@ -34,6 +36,7 @@ public class SecretToken {
     @Column(name = "bucket_id")
     private UUID bucketId;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SecretTokenDTO {
     private UUID id;
 
-    private String accessKeyId;
+    private UUID accessKeyId;
 
     private String secretAccessKeyHash;
 
