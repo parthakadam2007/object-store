@@ -3,6 +3,8 @@ package com.parthakadam.space.auth_service.services.accessIDService;
 
 import com.parthakadam.space.auth_service.AuthServiceApplication;
 import com.parthakadam.space.auth_service.DTOs.SecretTokenDTO;
+import com.parthakadam.space.auth_service.exceptions.accessTokenExceptions.AccessTokenInfoSavingException;
+import com.parthakadam.space.auth_service.exceptions.accessTokenExceptions.AccessTokenValidatingException;
 import com.parthakadam.space.auth_service.mappers.SecretTokenMapper;
 import com.parthakadam.space.auth_service.models.SecretToken;
 import com.parthakadam.space.auth_service.repositorys.SecretTokenRepository;
@@ -50,7 +52,7 @@ public class AccessIDAuthSerivceImp  implements  AccessIDAuthSerivce {
             secretTokenDTO =  SecretTokenMapper.toDTO(secretTokenRepository.save(token));
         } catch (Exception e) {
             logger.error("buckerId: " + bucketId);
-            throw new RuntimeException("Exception when creating Access token",e);
+            throw new AccessTokenInfoSavingException("Exception when creating Access token",e);
         }
 
         secretTokenDTO.setSecretAccessKeyHash(secretTokenStr);
@@ -58,7 +60,7 @@ public class AccessIDAuthSerivceImp  implements  AccessIDAuthSerivce {
     }
 
     @Override
-    public Boolean validateAccessID(UUID accessID, UUID bucketId, String accessToken) {
+    public Boolean validateAccessID(UUID accessID, UUID bucketId, String accessToken) throws AccessTokenValidatingException{
 
         List<SecretToken> secretTokens;
 
@@ -66,7 +68,7 @@ public class AccessIDAuthSerivceImp  implements  AccessIDAuthSerivce {
             secretTokens = secretTokenRepository.findByAccessKeyId(accessID);
         } catch (Exception e) {
             logger.error("Error fetching secret tokens | accessID={} bucketId={}", accessID, bucketId, e);
-            throw new RuntimeException("Exception when validating access token", e);
+            throw new AccessTokenValidatingException("Exception when validating access token", e);
         }
 
         if (secretTokens.isEmpty()) {
