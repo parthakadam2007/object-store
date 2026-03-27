@@ -18,7 +18,7 @@ public class AccessIDAuthController {
     AccessIDAuthSerivceImp accessIDAuthSerivceImp;
 
     AccessIDAuthController(AccessIDAuthSerivceImp accessIDAuthSerivceImp){
-        this.accessIDAuthSerivceImp=accessIDAuthSerivceImp;
+        this.accessIDAuthSerivceImp = accessIDAuthSerivceImp;
     }
 
     @GetMapping("/checkAccessID")
@@ -29,10 +29,10 @@ public class AccessIDAuthController {
 
     @PostMapping("/createAccessSecret")
     public ResponseEntity<SecretTokenDTO> createAccessSecret(@RequestBody Map<String, UUID> request) {
-        UUID objectId = request.get("objectId");
-        if(objectId==null)return ResponseEntity.badRequest().build();
+        UUID bucketId = request.get("bucketId");
+        if(bucketId==null)return ResponseEntity.badRequest().build();
 
-        SecretTokenDTO secretToken = accessIDAuthSerivceImp.createAccessID(objectId);
+        SecretTokenDTO secretToken = accessIDAuthSerivceImp.createAccessID(bucketId);
 
         return ResponseEntity.ok(secretToken);
     }

@@ -50,6 +50,10 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 8. cli interface
 
+9. Circuit bearker
+
+10. Erasure coding 
+
 ## Quickstart 
 
 Prerequisites

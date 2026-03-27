@@ -17,12 +17,13 @@ public interface BucketRepository extends JpaRepository<Bucket,UUID>{
      
 @Modifying
 @Query(
-    value = "INSERT INTO buckets (name, region) VALUES (:name, :region)",
+    value = "INSERT INTO buckets (name, region,id) VALUES (:name, :region,:id)",
     nativeQuery = true
 )
 Bucket createBucket(
     @Param("name") String name,
-    @Param("region") String region
+    @Param("region") String region,
+    @Param("id") UUID id
 );
 
 @Modifying

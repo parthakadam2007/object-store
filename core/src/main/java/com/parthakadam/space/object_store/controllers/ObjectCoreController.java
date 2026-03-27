@@ -84,7 +84,7 @@ public class ObjectCoreController {
     //////////////// post                                   /////
     /// Creating buckets
     @PostMapping("/buckets")
-    public ResponseEntity<BucketResponseDTO> createBucket(
+    public ResponseEntity<BucketResponseDTO> createBucketController(
             @Valid @RequestBody BucketCreateRequestDTO dto) {
 
         Bucket bucket = bucketService.createBucket(dto.getName(), dto.getRegion());

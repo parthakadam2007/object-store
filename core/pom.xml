@@ -103,6 +103,13 @@
     <artifactId>jaxb-api</artifactId>
     <version>2.4.0-b180830.0359</version>
   </dependency>
+
+    <!--    microservice dependency-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
 </dependencies>
 
 	<build>
