@@ -1,5 +1,6 @@
 package com.parthakadam.space.object_store.controllers;
 
+import com.parthakadam.space.object_store.dto.BucketResponseAccessTokenDTO;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,13 +85,12 @@ public class ObjectCoreController {
     //////////////// post                                   /////
     /// Creating buckets
     @PostMapping("/buckets")
-    public ResponseEntity<BucketResponseDTO> createBucketController(
+    public ResponseEntity<BucketResponseAccessTokenDTO> createBucketController(
             @Valid @RequestBody BucketCreateRequestDTO dto) {
 
-        Bucket bucket = bucketService.createBucket(dto.getName(), dto.getRegion());
-        BucketResponseDTO response = BucketMapper.toDTO(bucket);
+        BucketResponseAccessTokenDTO bucketResponseAccessTokenDTO = bucketService.createBucket(dto.getName(), dto.getRegion());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bucketResponseAccessTokenDTO);
     }
 
      @PostMapping("/{bucket}/{key}")
