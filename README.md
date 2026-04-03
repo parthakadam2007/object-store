@@ -3,7 +3,7 @@
 ![Logo](./docs/logo1.png)
 
 **Simple object storage service (Spring Boot)**
-This is very immature way of implementing an cloud native object store I have skiped gateway layer(auth),no replication,and currently every thing is running on single host and on single thread and on single storage device :). But it can give you a simple understanding of object-store working
+cloud native object store with replication,and currently every thing is running on single host  on single storage device :). But it can give you a simple understanding of object-store working
 
 A small Spring Boot service for storing objects (files) on disk and recording metadata in PostgreSQL. This repo is intended as a demo / starting point for a self-hosted object store and includes basic endpoints for creating buckets, uploading files, and downloading objects.
 
@@ -19,9 +19,6 @@ A small Spring Boot service for storing objects (files) on disk and recording me
 ## Future feature:
 This features are very keen to make it scalabe and production ready
 1. Implementing authentication
-  - secret token auth
-      access key ID 
-      secret access key
   - Rate limiting (per access key / IP)
 
 
@@ -32,6 +29,7 @@ This features are very keen to make it scalabe and production ready
 Now object store is directly writing to DB (which is wrong for multiple resone)
 
 3. failure handling
+  - Circuit bearker
 
 4. Split Object Core into Sub-Managers
 
@@ -50,9 +48,15 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 8. cli interface
 
-9. Circuit bearker
-
 10. Erasure coding 
+
+11. different application property file for production and dev
+
+12. chunking large files
+
+13. CDN-style caching
+
+14. rate limiting
 
 ## Quickstart 
 
@@ -61,6 +65,7 @@ Prerequisites
 - Java 21
 - Maven 3.8+
 - PostgreSQL
+- flyway
 
 1. Configure the DB in `src/main/resources/application.properties` (default values used in repo):
 

@@ -29,12 +29,15 @@ import jakarta.validation.ValidationException;
 @Service
 public class ObjectServiceImp implements ObjectService {
 
-    @Autowired
     BucketServiceImp bucketService;
-    @Autowired
     ObjectStoreConfig objectStoreConfig;
-    @Autowired
     ObjectRepository objectRepository;
+
+    ObjectServiceImp(BucketServiceImp bucketService, ObjectStoreConfig objectStoreConfig, ObjectRepository objectRepository) {
+        this.bucketService = bucketService;
+        this.objectStoreConfig = objectStoreConfig;
+        this.objectRepository = objectRepository;
+    }
 
     private static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);
