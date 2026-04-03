@@ -2,10 +2,10 @@
 
 ![Logo](./docs/logo1.png)
 
-**Simple object storage service (Spring Boot)**
+**object storage service **
 cloud native object store with replication,and currently every thing is running on single host  on single storage device :). But it can give you a simple understanding of object-store working
 
-A small Spring Boot service for storing objects (files) on disk and recording metadata in PostgreSQL. This repo is intended as a demo / starting point for a self-hosted object store and includes basic endpoints for creating buckets, uploading files, and downloading objects.
+
 
 ---
 
@@ -18,10 +18,11 @@ A small Spring Boot service for storing objects (files) on disk and recording me
 ---
 ## Future feature:
 This features are very keen to make it scalabe and production ready
+
+This project is developed in keeping this things in mind -- easy to configure & setup , maintain and fault tolerrant 
+
 1. Implementing authentication
   - Rate limiting (per access key / IP)
-
-
   - Request signing (AWS S3 style HMAC)
   - Request signing (AWS S3 style HMAC)
 
@@ -29,7 +30,12 @@ This features are very keen to make it scalabe and production ready
 Now object store is directly writing to DB (which is wrong for multiple resone)
 
 3. failure handling
-  - Circuit bearker
+  Software
+    - Circuit breaker between cascading services
+  hardware 
+    - hard disk failur
+
+4. hot botting of hard disk    
 
 4. Split Object Core into Sub-Managers
 
@@ -55,6 +61,8 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 12. chunking large files
 
 13. CDN-style caching
+
+14. different layers of caching 
 
 14. rate limiting
 
