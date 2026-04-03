@@ -2,8 +2,8 @@
 
 ![Logo](./docs/logo1.png)
 
-**object storage service **
-cloud native object store with replication,and currently every thing is running on single host  on single storage device :). But it can give you a simple understanding of object-store working
+
+Cloud native object store with replication,and currently every thing is running on single host  on single storage device :) But it can give you a simple understanding of object-store working
 
 
 
@@ -38,14 +38,14 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 4. hot botting of hard disk    
 
 4. Split Object Core into Sub-Managers
-
+```
   Object Core Manager
   ├── Placement Engine
   ├── Replication Manager
   ├── Health Monitor
   ├── Rebalancer
   └── Garbage Collector
-
+```
 5. Support large file write and read
 
 6. versioning 
@@ -65,6 +65,8 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 14. different layers of caching 
 
 14. rate limiting
+
+15. simplify setup process
 
 ## Quickstart 
 
