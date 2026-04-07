@@ -68,6 +68,12 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 15. simplify setup process
 
+16. write test for core service
+
+17. multi stage docker build
+
+18. use docker.sh to automate
+
 ## Quickstart 
 
 Prerequisites
