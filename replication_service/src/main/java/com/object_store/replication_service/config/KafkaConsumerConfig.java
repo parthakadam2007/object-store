@@ -33,7 +33,7 @@ public class KafkaConsumerConfig {
 
         config.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "my-group"
+                "replication-service-group"
         );
 
         config.put(

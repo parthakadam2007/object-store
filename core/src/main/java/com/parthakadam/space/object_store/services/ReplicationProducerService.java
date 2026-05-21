@@ -23,7 +23,10 @@
 
 package com.parthakadam.space.object_store.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.parthakadam.space.object_store.dto.ObjectReplicationMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -31,23 +34,36 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReplicationProducerService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
-    public void sendMessage(String message) {
+    private static final String TOPIC = "object-replication";
 
-        CompletableFuture<?> future =
-                kafkaTemplate.send("my-topic", message);
+    public void sendReplicationMessage(ObjectReplicationMessage message) {
+        try {
+            String jsonMessage = objectMapper.writeValueAsString(message);
+            String key = message.getObjectId().toString();
 
-        future.whenComplete((result, ex) -> {
-            // TODO :repalce with logging 
-            if (ex == null) {
-                System.out.println("Message Sent: " + message);
-            } else {
-                System.out.println("Error: " + ex.getMessage());
-            }
+            log.info("Sending replication message for object: {}", message.getObjectId());
 
-        });
+            CompletableFuture<?> future = kafkaTemplate.send(TOPIC, key, jsonMessage);
+
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Replication message sent successfully for object: {}", 
+                            message.getObjectId());
+                } else {
+                    log.error("Failed to send replication message for object: {}", 
+                            message.getObjectId(), ex);
+                }
+            });
+        } catch (Exception e) {
+            log.error("Error serializing replication message for object: {}", 
+                    message.getObjectId(), e);
+            throw new RuntimeException("Failed to send replication message", e);
+        }
     }
 }

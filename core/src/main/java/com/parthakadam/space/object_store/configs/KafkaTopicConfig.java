@@ -8,7 +8,12 @@ import org.springframework.context.annotation.Configuration;
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic createTopic() {
+    public NewTopic objectReplicationTopic() {
+        return new NewTopic("object-replication", 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic legacyTopic() {
         return new NewTopic("my-topic", 1, (short) 1);
     }
 }

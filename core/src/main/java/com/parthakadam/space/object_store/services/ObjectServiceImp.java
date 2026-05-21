@@ -39,6 +39,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.parthakadam.space.object_store.configs.ObjectStoreConfig;
+import com.parthakadam.space.object_store.dto.ObjectReplicationMessage;
 import com.parthakadam.space.object_store.models.Bucket;
 import com.parthakadam.space.object_store.models.ObjectEntity;
 import com.parthakadam.space.object_store.repository.ObjectRepository;
@@ -46,18 +47,22 @@ import com.parthakadam.space.object_store.repository.ObjectRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ObjectServiceImp implements ObjectService {
 
     BucketServiceImp bucketService;
     ObjectStoreConfig objectStoreConfig;
     ObjectRepository objectRepository;
+    ReplicationProducerService replicationProducerService;
 
-    ObjectServiceImp(BucketServiceImp bucketService, ObjectStoreConfig objectStoreConfig, ObjectRepository objectRepository) {
+    ObjectServiceImp(BucketServiceImp bucketService, ObjectStoreConfig objectStoreConfig, ObjectRepository objectRepository, ReplicationProducerService replicationProducerService) {
         this.bucketService = bucketService;
         this.objectStoreConfig = objectStoreConfig;
         this.objectRepository = objectRepository;
+        this.replicationProducerService = replicationProducerService;
     }
 
     private static String bytesToHex(byte[] bytes) {
@@ -160,8 +165,9 @@ public class ObjectServiceImp implements ObjectService {
         object.setChecksumSha256(bytesToHex(digest.digest()));
 
         // 4. Save metadata in DB
+        ObjectEntity savedObject;
         try {
-            return objectRepository.save(object);
+            savedObject = objectRepository.save(object);
         } catch (Exception e) {
             // DB failed → rollback file
             try {
@@ -170,6 +176,27 @@ public class ObjectServiceImp implements ObjectService {
             }
             throw e;
         }
+
+        // 5. Publish replication message
+        try {
+            ObjectReplicationMessage replicationMessage = ObjectReplicationMessage.builder()
+                    .objectId(savedObject.getId())
+                    .dataPath(savedObject.getDataPath())
+                    .sizeBytes(savedObject.getSizeBytes())
+                    .contentType(savedObject.getContentType())
+                    .checksumSha256(savedObject.getChecksumSha256())
+                    .createdAt(savedObject.getCreatedAt())
+                    .build();
+
+            replicationProducerService.sendReplicationMessage(replicationMessage);
+            log.info("Published replication message for object: {}", savedObject.getId());
+        } catch (Exception e) {
+            log.error("Failed to publish replication message for object: {}", savedObject.getId(), e);
+            // Don't fail the entire putObject operation if replication message fails
+            // Consider implementing a retry mechanism or dead-letter queue
+        }
+
+        return savedObject;
     }
 
     @Transactional
