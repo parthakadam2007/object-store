@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: object-store-config
 data:
-  DB_URL: jdbc:postgresql://host.docker.internal:5432/objectStore
+  DB_URL_CORE: jdbc:postgresql://host.docker.internal:5432/objectStore
+  DB_URL_AUTH: jdbc:postgresql://host.docker.internal:5432/object_store_auth

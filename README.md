@@ -74,6 +74,12 @@ Now object store is directly writing to DB (which is wrong for multiple resone)
 
 18. use docker.sh to automate
 
+19. setup Kubeadm  for production ready usecase
+
+20. implement saga patterns where needed
+
+21. Add s3 for redundancy 
+
 ## Quickstart 
 
 Prerequisites

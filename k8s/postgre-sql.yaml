@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres
+spec:
+  containers:
+    - name: postgres
+      image: postgres:16
+
+      env:
+        - name: POSTGRES_PASSWORD
+          value: mypassword
+
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-storage
+
+  volumes:
+    - name: postgres-storage
+      hostPath:
+        path: /run/desktop/mnt/host/d/postgres-data
+        type: DirectoryOrCreate

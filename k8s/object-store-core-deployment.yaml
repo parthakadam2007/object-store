@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: object-store
+  name: object-store-core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: object-store
+      app: object-store-core
   template:
     metadata:
       labels:
-        app: object-store
+        app: object-store-core
     spec:
       containers:
-        - name: object-store
-          image: parthakadam/object-store-app:v10
+        - name: object-store-core
+          image: parthakadam/object-store-core:latest
           ports:
             - containerPort: 8080
           volumeMounts:

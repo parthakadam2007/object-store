@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2026 Partha Kadam
  *
@@ -20,16 +21,33 @@
  * SOFTWARE.
  */
 
-package com.parthakadam.space.auth_service;
+package com.parthakadam.space.object_store.services;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
-@SpringBootApplication
-public class AuthServiceApplication {
+import java.util.concurrent.CompletableFuture;
 
-	public static void main(String[] args) {
-		SpringApplication.run(AuthServiceApplication.class, args);
-	}
+@Service
+@RequiredArgsConstructor
+public class ReplicationProducerService {
 
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public void sendMessage(String message) {
+
+        CompletableFuture<?> future =
+                kafkaTemplate.send("my-topic", message);
+
+        future.whenComplete((result, ex) -> {
+            // TODO :repalce with logging 
+            if (ex == null) {
+                System.out.println("Message Sent: " + message);
+            } else {
+                System.out.println("Error: " + ex.getMessage());
+            }
+
+        });
+    }
 }

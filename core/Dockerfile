@@ -2,7 +2,7 @@ FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
-ENV DB_URL=jdbc:postgresql://host.docker.internal:5432/objectStore
+ENV DB_URL_CORE=jdbc:postgresql://host.docker.internal:5432/objectStore
 
 COPY target/core-0.0.1-SNAPSHOT.jar app.jar
 

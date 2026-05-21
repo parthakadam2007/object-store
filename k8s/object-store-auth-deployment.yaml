@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: object-store-auth
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: object-store-auth
+  template:
+    metadata:
+      labels:
+        app: object-store-auth
+    spec:
+      containers:
+        - name: object-store-auth
+          image: parthakadam/object-store-auth:latest
+          ports:
+            - containerPort: 8081
+          # volumeMounts:
+          #   - name: upload-volume
+          #     mountPath: /data/uploads
+      # volumes:
+      #   - name: upload-volume
+      #     hostPath:
+      #       path: /mnt/data/object_store_data
+      #       type: DirectoryOrCreate
+
