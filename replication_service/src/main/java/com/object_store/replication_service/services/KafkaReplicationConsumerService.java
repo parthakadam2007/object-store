@@ -28,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.concurrent.Future;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -40,16 +43,17 @@ public class KafkaReplicationConsumerService {
     public void consume(String message) {
         try {
             log.info("Received replication message: {}", message);
-
+            System.out.println("Received replication message:");
             // Deserialize JSON message to ObjectReplicationMessage
             ObjectReplicationMessage replicationMessage = objectMapper
                     .readValue(message, ObjectReplicationMessage.class);
 
             // Create replica in the database
-            replicationService.createReplica(replicationMessage);
+            List<Future<String>> futures =  replicationService.createReplica(replicationMessage,2);
 
             log.info("Successfully processed replication message for object: {}", 
                     replicationMessage.getObjectId());
+            log.info(futures.getFirst().toString());
 
         } catch (Exception e) {
             log.error("Failed to process replication message: {}", message, e);
