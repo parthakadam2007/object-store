@@ -25,6 +25,7 @@ package com.object_store.replication_service.services;
 import com.object_store.replication_service.dto.ObjectReplicationMessage;
 import com.object_store.replication_service.exceptions.ReplicatonException;
 import com.object_store.replication_service.executor.ObjectReplicationTask;
+import com.object_store.replication_service.repository.ReplicaRepository;
 import com.object_store.replication_service.services.objectStorestrategies.LocalLoader;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -44,13 +45,17 @@ import java.util.concurrent.Future;
 
 @Service
 class ReplicationService {
-    ThreadPoolTaskExecutor executor;
-    ObjectLoaderContextService objectLoaderContextService;
     Logger logger = LoggerFactory.getLogger(ReplicationService.class);
 
-    public ReplicationService(ThreadPoolTaskExecutor executor, ObjectLoaderContextService  objectLoaderContextService, LocalLoader localLoader) {
+    ThreadPoolTaskExecutor executor;
+    ObjectLoaderContextService objectLoaderContextService;
+    ReplicaRepository replicaRepository;
+
+
+    public ReplicationService(ThreadPoolTaskExecutor executor, ObjectLoaderContextService  objectLoaderContextService, LocalLoader localLoader, ReplicaRepository replicaRepository) {
         this.executor = executor;
         this.objectLoaderContextService = objectLoaderContextService;
+        this.replicaRepository = replicaRepository;
         objectLoaderContextService.setLoaderStatergy(localLoader);
     }
 
@@ -66,7 +71,7 @@ class ReplicationService {
         byte[] buffer = objectLoaderContextService.loadFile(message.getDataPath());
 
         for(int i=0;i<replicas;i++){
-            tasks.addLast(new ObjectReplicationTask(message,buffer));
+            tasks.addLast(new ObjectReplicationTask(message,buffer,replicaRepository));
         }
 
         List<Future<String>> futures = executor.getThreadPoolExecutor().invokeAll(tasks) ;
